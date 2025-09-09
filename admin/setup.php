@@ -652,5 +652,8 @@ print '</tr>';
 print '</table>';
 print '</form>';
 
+// Include Keyyo admin JavaScript
+print '<script src="' . dol_buildpath('/easycrm/js/keyyo-admin.js', 1) . '"></script>';
+
 $db->close();
 llxFooter();

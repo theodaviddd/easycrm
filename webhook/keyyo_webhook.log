@@ -1,0 +1,14 @@
+[2025-09-09 16:24:07] REQUEST: {"when":"2025-09-09T16:24:07+02:00","remote_ip":"::1","method":"POST","query":{"account":"33483935280","caller":"33687872109","callee":"33483935280","type":"SETUP"},"ctype":"application\/json","headers":{"USER-AGENT":"PostmanRuntime\/7.28.4","ACCEPT":"*\/*","CACHE-CONTROL":"no-cache","POSTMAN-TOKEN":"7f88ad30-bdf4-4fea-a371-1bba38acfeb1","HOST":"localhost","ACCEPT-ENCODING":"gzip, deflate, br","CONNECTION":"keep-alive","COOKIE":"DOLSESSID_9d7a4d9f659f90b886b07b5d780926f631ab2674=vf7580ldouqfnevmji224g5a36"},"raw":"{\r\n    \"test\": \"coucou\"\r\n}","post":[]}
+[2025-09-09 16:24:07] JSON OK: caller=33687872109 callee=33483935280
+[2025-09-09 16:24:07] Searching for user with phone ending: 483935280
+[2025-09-09 16:24:07] Searching for contact with phone ending: 687872109
+[2025-09-09 16:24:07] Found user: admin (ID: 1)
+[2025-09-09 16:24:07] Found contact: Theo David (ID: 2455)
+[2025-09-09 16:24:07] Stored call event with ID: 2
+[2025-09-09 16:38:36] REQUEST: {"when":"2025-09-09T16:38:36+02:00","remote_ip":"::1","method":"POST","query":{"account":"33483935280","caller":"33687872109","callee":"33483935280","type":"SETUP"},"ctype":"application\/json","headers":{"USER-AGENT":"PostmanRuntime\/7.28.4","ACCEPT":"*\/*","CACHE-CONTROL":"no-cache","POSTMAN-TOKEN":"0b6b7748-8bb6-4f22-9c10-d9c37f6f6db9","HOST":"localhost","ACCEPT-ENCODING":"gzip, deflate, br","CONNECTION":"keep-alive","COOKIE":"DOLSESSID_9d7a4d9f659f90b886b07b5d780926f631ab2674=vf7580ldouqfnevmji224g5a36"},"raw":"{\r\n    \"test\": \"coucou\"\r\n}","post":[]}
+[2025-09-09 16:38:36] JSON OK: caller=33687872109 callee=33483935280
+[2025-09-09 16:38:36] Searching for user with phone ending: 483935280
+[2025-09-09 16:38:36] Searching for contact with phone ending: 687872109
+[2025-09-09 16:38:36] Found user: admin (ID: 1)
+[2025-09-09 16:38:36] Found contact: Theo David (ID: 2455)
+[2025-09-09 16:38:36] Stored call event with ID: 3

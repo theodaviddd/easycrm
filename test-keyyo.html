@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Keyyo SDK</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .button {
+            background: #007cba;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #005a87;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>Test Keyyo CTI SDK</h1>
+    
+    <div class="test-section">
+        <h3>Configuration OAuth</h3>
+        <p><strong>Client ID:</strong> 68b6b2440fe6a</p>
+        <p><strong>Client Secret:</strong> 725a1c4d5333171121b35d67</p>
+        <p><strong>Authorize URL:</strong> https://ssl.keyyo.com/oauth2/authorize.php</p>
+        <p><strong>Token URL:</strong> https://api.keyyo.com/oauth2/token.php</p>
+    </div>
+
+    <div class="test-section">
+        <h3>Tests SDK</h3>
+        <button class="button" onclick="loadSDK()">Charger SDK Keyyo</button>
+        <button class="button" onclick="testConnection()">Tester Connexion</button>
+        <button class="button" onclick="testOAuth()">Tester OAuth</button>
+        <button class="button" onclick="simulateCall()">Simuler Appel</button>
+        
+        <div id="results" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Console de debug</h3>
+        <div id="console" style="background: #000; color: #0f0; padding: 10px; font-family: monospace; height: 200px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        const config = {
+            clientId: '68b6b2440fe6a',
+            clientSecret: '725a1c4d5333171121b35d67',
+            authorizeUrl: 'https://ssl.keyyo.com/oauth2/authorize.php',
+            tokenUrl: 'https://api.keyyo.com/oauth2/token.php'
+        };
+
+        let keyyoSDK = null;
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const consoleDiv = document.getElementById('console');
+            const resultsDiv = document.getElementById('results');
+            
+            const logMessage = `[${timestamp}] ${message}`;
+            consoleDiv.innerHTML += logMessage + '\n';
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            
+            resultsDiv.innerHTML = `<div class="${type}">${message}</div>`;
+            
+            console.log(logMessage);
+        }
+
+        async function loadSDK() {
+            try {
+                log('Chargement du SDK Keyyo...', 'info');
+                
+                // Essayer plusieurs URLs possibles
+                const sdkUrls = [
+                    'https://api.keyyo.com/libs/keyyo-cti/1.1/keyyo-cti.min.js',
+                    'https://cdn.keyyo.com/js/keyyo-cti.js',
+                    'https://api.keyyo.com/js/sdk.js'
+                ];
+
+                for (const url of sdkUrls) {
+                    try {
+                        log(`Tentative de chargement depuis: ${url}`, 'info');
+                        await loadScript(url);
+                        log(`✓ SDK chargé avec succès depuis: ${url}`, 'success');
+                        return;
+                    } catch (e) {
+                        log(`✗ Échec du chargement depuis: ${url}`, 'error');
+                    }
+                }
+                
+                throw new Error('Impossible de charger le SDK depuis aucune URL');
+                
+            } catch (error) {
+                log(`Erreur de chargement SDK: ${error.message}`, 'error');
+            }
+        }
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        async function testConnection() {
+            try {
+                log('Test de connexion Keyyo...', 'info');
+                
+                if (!window.Keyyo) {
+                    throw new Error('SDK Keyyo non chargé');
+                }
+
+                log('✓ SDK Keyyo trouvé', 'info');
+                keyyoSDK = new window.Keyyo.CTI();
+                log('✓ Instance CTI créée', 'success');
+                log('⚠ Besoin d\'un CSI token pour create_session()', 'info');
+                
+                // Pour tester, on peut essayer avec le client ID (mais ça ne marchera pas)
+                log('Tentative avec client ID (test)...', 'info');
+                keyyoSDK.create_session(config.clientId, function(err, res) {
+                    if (err) {
+                        log(`✗ Erreur attendue: ${err.message || err}`, 'error');
+                        log('💡 Il faut un CSI token, pas un client ID', 'info');
+                    } else {
+                        log('✓ Connexion réussie: ' + JSON.stringify(res), 'success');
+                    }
+                });
+
+            } catch (error) {
+                log(`Erreur de connexion: ${error.message}`, 'error');
+            }
+        }
+
+        function testOAuth() {
+            try {
+                log('Test du flux OAuth...', 'info');
+                
+                const authUrl = `${config.authorizeUrl}?client_id=${config.clientId}&response_type=code&redirect_uri=${encodeURIComponent(window.location.origin)}`;
+                
+                log(`URL d'autorisation: ${authUrl}`, 'info');
+                log('✓ URL OAuth générée avec succès', 'success');
+                
+                // Test de l'accessibilité de l'endpoint token
+                fetch(config.tokenUrl, { method: 'HEAD', mode: 'no-cors' })
+                    .then(() => log('✓ Endpoint token accessible', 'success'))
+                    .catch(e => log(`⚠ Endpoint token: ${e.message}`, 'error'));
+                    
+            } catch (error) {
+                log(`Erreur OAuth: ${error.message}`, 'error');
+            }
+        }
+
+        function simulateCall() {
+            try {
+                log('Simulation d\'un appel entrant...', 'info');
+                
+                const callData = {
+                    call_id: 'test-' + Date.now(),
+                    phone_number: '+33123456789',
+                    caller_name: 'Test Client',
+                    timestamp: Date.now()
+                };
+
+                log(`Données d'appel simulé: ${JSON.stringify(callData, null, 2)}`, 'info');
+                
+                if (keyyoSDK && keyyoSDK.onIncomingCall) {
+                    keyyoSDK.onIncomingCall(callData);
+                    log('✓ Événement d\'appel simulé déclenché', 'success');
+                } else {
+                    log('⚠ SDK non initialisé, simulation locale seulement', 'info');
+                }
+
+            } catch (error) {
+                log(`Erreur de simulation: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-load SDK on page load
+        window.addEventListener('load', () => {
+            log('Page chargée, initialisation...', 'info');
+            loadSDK();
+        });
+    </script>
+</body>
+</html> 

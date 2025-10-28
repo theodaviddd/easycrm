@@ -21,3 +21,25 @@ ModuleReedCRMName      = ReedCRM
 ModuleReedCRMDesc      = Simplification of CRM
 ReedCRMDescription     = Simplification of CRM
 ReedCRMDescriptionLong = Simplification of CRM
+
+#
+# Keyyo - Keyyo Integration
+#
+
+# Data
+Keyyo = Keyyo
+KeyyoNotAuthenticated = You must authenticate with Keyyo to access this feature.
+KeyyoAuthenticate = Authenticate with Keyyo
+KeyyoLogout = Logout from Keyyo
+KeyyoAuthSuccess = Keyyo authentication successful
+KeyyoAuthError = Keyyo authentication error
+KeyyoLogoutSuccess = Keyyo logout successful
+KeyyoTokenExpired = Your Keyyo session has expired. Automatic reconnection...
+KeyyoAPIError = Error retrieving Keyyo data
+KeyyoContactsFound = %s contact(s) with phone numbers found
+KeyyoCalls = Calls
+NoCallsFound = No calls found
+NoSMSFound = No SMS found
+NoPhoneNumbersFoundForThisThirdparty = No phone numbers found for this thirdparty
+Incoming = Incoming
+Outgoing = Outgoing

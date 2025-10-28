@@ -241,7 +241,10 @@ class modReedCRM extends DolibarrModules
             $i++ => ['REEDCRM_VERSION','chaine', $this->version, '', 0, 'current'],
             $i++ => ['REEDCRM_DB_VERSION', 'chaine', $this->version, '', 0, 'current'],
             $i++ => ['REEDCRM_SHOW_PATCH_NOTE', 'integer', 1, '', 0, 'current'],
-            $i   => ['REEDCRM_ACTIONCOMM_COMMERCIAL_RELAUNCH_TAG', 'integer', 0, '', 0, 'current']
+            $i++ => ['REEDCRM_ACTIONCOMM_COMMERCIAL_RELAUNCH_TAG', 'integer', 0, '', 0, 'current'],
+            
+            // CONST KEYYO
+            $i   => ['REEDCRM_KEYYO_TOKEN', 'chaine', '', '', 0, 'current']
         ];
 
         // Some keys to add into the overwriting translation tables
@@ -265,6 +268,7 @@ class modReedCRM extends DolibarrModules
         $this->tabs[] = ['data' => 'project' . ':+map:' . $pictoReedcrm . $langs->transnoentities('Map') . ':reedcrm@reedcrm:$user->hasRight(\'project\', \'read\'):/custom/reedcrm/view/map.php?from_id=__ID__&from_type=project'];
         $this->tabs[] = ['data' => 'project' . ':+event:' . $pictoReedcrm . $langs->transnoentities('CardPro') . ':reedcrm@reedcrm:1:/custom/reedcrm/view/procard.php?from_id=__ID__&from_type=project'];
         $this->tabs[] = ['data' => 'thirdparty' . ':+event:' . $pictoReedcrm . $langs->transnoentities('CardPro') . ':reedcrm@reedcrm:1:/custom/reedcrm/view/procard.php?from_id=__ID__&from_type=societe'];
+        $this->tabs[] = ['data' => 'thirdparty' . ':+keyyo:' . $pictoReedcrm . $langs->transnoentities('Keyyo') . ':reedcrm@reedcrm:1:/custom/reedcrm/view/keyyo_calls_sms.php?id=__ID__'];
         /* END MODULEBUILDER TABS */
 
         // Dictionaries

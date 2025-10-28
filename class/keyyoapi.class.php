@@ -21,6 +21,8 @@
  * \brief   Class to manage Keyyo API calls with OAuth2
  */
 
+require_once DOL_DOCUMENT_ROOT . '/core/lib/admin.lib.php';
+
 /**
  * Class to manage Keyyo API with OAuth2
  */
@@ -59,7 +61,7 @@ class KeyyoAPI
     /**
      * @var string Redirect URI (hardcoded for now)
      */
-    private $redirectUri = 'https://critics-lightbox-robust-each.trycloudflare.com/dolibarr/htdocs/custom/reedcrm/test/test_keyyo_class.php?action=callback';
+    private $redirectUri = 'https://critics-lightbox-robust-each.trycloudflare.com/dolibarr/htdocs/custom/reedcrm/view/keyyo_calls_sms.php?action=keyyo_callback';
 
     /**
      * @var string Access token
@@ -80,15 +82,16 @@ class KeyyoAPI
      */
     public function __construct($db)
     {
+        global $conf;
+
         $this->db = $db;
 
-        // Try to load token from session
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!empty($_SESSION['keyyo_token']['access_token'])) {
-            $this->accessToken = $_SESSION['keyyo_token']['access_token'];
+        // Load token from Dolibarr configuration
+        if (!empty($conf->global->REEDCRM_KEYYO_TOKEN)) {
+            $tokenData = json_decode($conf->global->REEDCRM_KEYYO_TOKEN, true);
+            if (is_array($tokenData) && !empty($tokenData['access_token'])) {
+                $this->accessToken = $tokenData['access_token'];
+            }
         }
     }
 
@@ -134,6 +137,8 @@ class KeyyoAPI
      */
     public function handleCallback($code, $state)
     {
+        global $conf;
+
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
@@ -149,7 +154,10 @@ class KeyyoAPI
 
             if (!empty($tokenData['access_token'])) {
                 $this->accessToken = $tokenData['access_token'];
-                $_SESSION['keyyo_token'] = $tokenData;
+
+                // Save token in Dolibarr configuration
+                dolibarr_set_const($this->db, 'REEDCRM_KEYYO_TOKEN', json_encode($tokenData), 'chaine', 0, '', $conf->entity);
+
                 return true;
             }
 
@@ -404,6 +412,7 @@ class KeyyoAPI
      * @param  string      $endpoint Endpoint path (e.g., '/incoming_call_detail')
      * @param  array       $query    Query parameters
      * @return array|false           Response data or false on error
+     * @throws Exception             If token is invalid (401)
      */
     private function apiGet($endpoint, $query = [])
     {
@@ -432,6 +441,15 @@ class KeyyoAPI
 
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+
+        // Token expired or invalid
+        if ($httpCode === 401) {
+            global $conf;
+            // Clear invalid token
+            dolibarr_del_const($this->db, 'REEDCRM_KEYYO_TOKEN', $conf->entity);
+            $this->accessToken = null;
+            throw new Exception('KEYYO_TOKEN_EXPIRED');
+        }
 
         if ($httpCode < 200 || $httpCode >= 300) {
             $this->errors[] = "HTTP $httpCode: $response";

@@ -275,3 +275,25 @@ CustomerNote = Note client
 SendEmail = Envoyer un email
 EventCreated = Événement créé avec succès
 EmailFormReady = Formulaire d'email prêt
+
+#
+# Keyyo - Intégration Keyyo
+#
+
+# Data - Donnée
+Keyyo = Keyyo
+KeyyoNotAuthenticated = Vous devez vous authentifier avec Keyyo pour accéder à cette fonctionnalité.
+KeyyoAuthenticate = S'authentifier avec Keyyo
+KeyyoLogout = Se déconnecter de Keyyo
+KeyyoAuthSuccess = Authentification Keyyo réussie
+KeyyoAuthError = Erreur d'authentification Keyyo
+KeyyoLogoutSuccess = Déconnexion Keyyo réussie
+KeyyoTokenExpired = Votre session Keyyo a expiré. Reconnexion automatique...
+KeyyoAPIError = Erreur lors de la récupération des données Keyyo
+KeyyoContactsFound = %s contact(s) avec numéros de téléphone trouvés
+KeyyoCalls = Appels
+NoCallsFound = Aucun appel trouvé
+NoSMSFound = Aucun SMS trouvé
+NoPhoneNumbersFoundForThisThirdparty = Aucun numéro de téléphone trouvé pour ce tiers
+Incoming = Entrant
+Outgoing = Sortant
